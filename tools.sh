@@ -51,16 +51,13 @@ gittools_really_match_curbranch()
 	gittools_really_match_branch $(gittools_curbranch)
 }
 
-gittools_get_patch_target()
-{
-	git config --get patch.target
-}
-
 gittools_get_patch_target_option()
 {
-	local target=$(gittools_get_patch_target)
+	local target=$(git config --get patch.target)
 	if [ "$target" != "" ]; then
 		echo "--to $target"
+	else
+		echo "WARNING: No target --to specified in patch.target" >&2
 	fi
 }
 
