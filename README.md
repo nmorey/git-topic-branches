@@ -5,10 +5,10 @@ It allows developer to create topic branches targeting an upstream branch, keep 
 
 # Command summary
 
-**branch-check**: runs git cmd-check on all the topic-branch commits
-**branch-valid**: runs git cmd-check and git-cmd-build on all the topic-branch commits
-**branch-submit**: submit the patch series of a topic branch to an Imap folder
-**branches-autorebase**: Rebase ALL development branches against their upstream counterpart
+- **branch-check**: runs git cmd-check on all the topic-branch commits
+- **branch-valid**: runs git cmd-check and git-cmd-build on all the topic-branch commits
+- **branch-submit**: submit the patch series of a topic branch to an Imap folder
+- **branches-autorebase**: Rebase ALL development branches against their upstream counterpart
 
 # Configuration
 
@@ -25,8 +25,10 @@ git config devel-base.dev origin/master
 git config devel-base.dev-next official/dev-next
 ```
 This will allow the scripts to know which branch to rebase against.
+
 All branches named dev/<topic> will be rebased against origin/master, and dev-next/<topic>
  against official/dev-next
+
 Note that it also supports branches prefixed by user/$(whoami) or aci/$(whoami) for user working
  in a multi user repo
 
@@ -34,6 +36,7 @@ Note that it also supports branches prefixed by user/$(whoami) or aci/$(whoami) 
 
 git-topic-branches allows to run check or validation on a patch series to make sure the content
  is valid for upstreaming.
+
 Usually checks are simply to verifiy patch formatting, while validation is run for each commit
  in the topic branch to make sure they work individually.
 
@@ -65,6 +68,7 @@ git config alias.cmd-buid  'make all && make valid'
 * Sending emails
 
 By default, git imap-send is used to send the pre formatted patch to your imap account for a final review before sending the paches.
+
 This is an example configuration
 ```
 git config imap.folder Drafts
@@ -85,6 +89,7 @@ git config patch.prefix.dev-next 'ml-name][PATCH NEXT"
 # Using it
 
 Let's build a quick scenario where I want to propose a set of patch from an upstream master.
+
 We assume the devel-base for this branch is dev.
 
 Here's how it works
@@ -147,6 +152,7 @@ Series already checked (validated/2017/02/23/102614/dev/my-patches)
 ```
 
 Now let's make sure we are rabsed on the latest upstream branch.
+
 Be careful, this command will rebase ALL your branches
 ```
 $ /path/to/topic-branches/branches-autorebase
