@@ -3,6 +3,13 @@ git-topic-branches is a set of scripts to ease working with multiple branches to
 It allows developer to create topic branches targeting an upstream branch, keep them up to date,
  check and validate them, and then submitting them to mailing lists.
 
+# Command summary
+
+**branch-check**: runs git cmd-check on all the topic-branch commits
+**branch-valid**: runs git cmd-check and git-cmd-build on all the topic-branch commits
+**branch-submit**: submit the patch series of a topic branch to an Imap folder
+**branches-autorebase**: Rebase ALL development branches against their upstream counterpart
+
 # Configuration
 
 A little configuration is needed first. Everything is done using git config
@@ -65,6 +72,15 @@ git config imap.host imaps://mymail.server.com
 git config imap.user nmorey
 ```
 This way patches end up in the Drafts folder of my mail account and can be reviewed (or edited) before sending.
+
+* Custom mail titles
+
+By default email sent will use the git default [PATH] title.
+However you can configure title prefix per namespace.
+```
+git config patch.prefix.dev 'ml-name][PATCH"
+git config patch.prefix.dev-next 'ml-name][PATCH NEXT"
+```
 
 # Using it
 
@@ -152,11 +168,13 @@ Resolving mymail.server.com... ok
 Connecting to [127.0.0.1]:993... ok
 Logging in...
 
-(gnome-ssh-askpass:6774): Gtk-WARNING **: cannot open display: 
+(gnome-ssh-askpass:6774): Gtk-WARNING **: cannot open display:
 error: unable to read askpass response from '/usr/libexec/openssh/gnome-ssh-askpass'
-Password for 'imaps://nmorey@mymail.server.com': 
+Password for 'imaps://nmorey@mymail.server.com':
 sending 1 message
  100% (1/1) done
 
 ```
 
+Note that all arguments of branch-submit are passed to git-format-patch and can be used
+ to tweak patch configuration
