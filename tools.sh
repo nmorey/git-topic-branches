@@ -82,3 +82,21 @@ gittools_is_branch_checked_out()
 		done
 	return 1
 }
+
+gittools_check_work()
+{
+	if [ $(git rev-parse $1) == $(git rev-parse $2) ]; then
+		echo "No commit on this branch. Nothing to do..."
+		exit 0
+	fi
+}
+
+gittools_check_config_set()
+{
+	local config=$1
+	git config $1 > /dev/null
+	if [ $? -ne 0 ]; then
+		echo "ERROR: $1 needs to be set int .git/config" >&2
+		exit 1
+	fi
+}
