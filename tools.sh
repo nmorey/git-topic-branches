@@ -56,30 +56,6 @@ gittools_get_patch_target()
 	git config --get patch.target
 }
 
-gittools_get_patch_url()
-{
-	git config --get patch.url
-}
-
-gittools_get_prep_cmd()
-{
-	git config --get patch.prep-cmd
-}
-
-gittools_get_clean_cmd()
-{
-	git config --get patch.clean-cmd
-}
-
-gittools_get_build_cmd()
-{
-	git config --get patch.build-cmd
-}
-gittools_get_check_cmd()
-{
-	git config --get patch.check-cmd
-}
-
 gittools_get_patch_target_option()
 {
 	local target=$(gittools_get_patch_target)
