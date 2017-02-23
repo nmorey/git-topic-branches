@@ -1,23 +1,29 @@
 #!/bin/bash
 
-source $(dirname $(readlink -f ${0}))/tools.sh
-HEAD=$(gittools_curbranch)
-
-if [ "$1" != "" ]; then
-	matching=$1
-else
-	matching=$(gittools_really_match_branch $HEAD)
+if [ $# -ne 0 ]; then
+	echo "Usage: ${0}"
+	exit 1
 fi
+
+source $(dirname $(readlink -f ${0}))/tools.sh
+
+gittools_check_config_set alias.cmd-check
+
+HEAD=$(gittools_curbranch)
+matching=$(gittools_really_match_branch $HEAD)
 if [ "$matching" == "" ]; then
 	echo "No matching integration branch for '$HEAD'"
 	exit 1
 fi
+
+gittools_check_work $matching $HEAD
 
 TAG=$(git describe --exact-match  --match checked/20[0-9]**/$HEAD 2> /dev/null)
 if [ $? -eq 0 ]; then
 	echo "Series already checked ($TAG)"
 	exit 0
 fi
+
 
 echo "Checking patch from $matching to $HEAD"
 

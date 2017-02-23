@@ -2,6 +2,15 @@
 
 source $(dirname $(readlink -f ${0}))/tools.sh
 
+HEAD=$(gittools_curbranch)
 SINCE=$(gittools_really_match_curbranch)
+
+if [ "$SINCE" == "" ]; then
+	echo "ERROR: Could not find an upstream branch"
+	exit 1
+fi
+gittools_check_work $SINCE $HEAD
+
+# Force unsettign DISPLAY to avoid a graphical prompt for this
 unset DISPLAY
 exec git format-patch -M $(gittools_get_patch_target_option) "$(gittools_prefix_opt)" --stdout "$@" $SINCE  | git imap-send
