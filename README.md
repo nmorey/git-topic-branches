@@ -8,6 +8,7 @@ It allows developer to create topic branches targeting an upstream branch, keep 
 - **branch-check**: runs git cmd-check on all the topic-branch commits
 - **branch-valid**: runs git cmd-check and git-cmd-build on all the topic-branch commits
 - **branch-submit**: submit the patch series of a topic branch to an Imap folder
+- **branch-export-path**: export the patch series as files usable with patch
 - **branches-autorebase**: Rebase ALL development branches against their upstream counterpart
 
 # Configuration
