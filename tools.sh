@@ -85,6 +85,18 @@ gittools_is_branch_checked_out()
 
 gittools_check_work()
 {
+	set +e
+	git rev-parse -q --verify $1 > /dev/null
+	if [ $? -ne 0 ]; then
+		echo "Ref $1 does not exists" >&2
+		exit 1
+	fi
+	git rev-parse  -q --verify $2 > /dev/null
+	if [ $? -ne 0 ]; then
+		echo "Ref $2 does not exists" >&2
+		exit 1
+	fi
+	set -e
 	if [ $(git rev-parse $1) == $(git rev-parse $2) ]; then
 		echo "No commit on this branch. Nothing to do..."
 		exit 0
