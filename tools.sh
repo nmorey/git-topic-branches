@@ -34,9 +34,9 @@ gittools_prefix_opt()
 	pattern=$(echo ${branch} | sed -e "s/\(.*\/$(whoami)\/\)\?\([^\/]*\)\/.*/\2/")
 	TITLE=$(git config --get patch.prefix.${pattern})
 	if [ $? -eq 0 ]; then
-			echo "--subject-prefix=${TITLE}"
+		echo "--subject-prefix=${TITLE}"
 	else
-		echo "--subject-prefix=[PATCH]"
+		echo "--subject-prefix=PATCH"
 	fi
 	return
 }
