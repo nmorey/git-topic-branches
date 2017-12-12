@@ -12,8 +12,12 @@ fi
 
 gittools_check_work $SINCE $HEAD
 
+echo '' > patchlist
+i=0
 for SHA in $(git log --reverse --format=format:%H  $HEAD ^$SINCE); do
 	FNAME="$(git show --format=format:%f -s $SHA).patch"
 	echo "Generating $FNAME"
-	git diff $SHA~1 $SHA --no-prefix > $FNAME
+	echo "Patch$i: $FNAME" >> patchlist
+	git show  $SHA --no-prefix > $FNAME
+	i=$(($i + 1))
 done
