@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GITTOOLS_MATCHES=$(git config --get-regexp   devel-base | egrep '^devel-base\.' | sed -e 's/devel-base\.//')
+GITTOOLS_MATCHES=$(git config --get-regexp   devel-base | egrep '^devel-base\.' | sed -e 's/devel-base\.//' -e 's/---/\//g')
 gittools_match_branch()
 {
 	local branch=$1
