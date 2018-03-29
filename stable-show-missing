@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# Show commits which exist in a given range, but don't exist in the current
+# branch.
+#
+
+source $(dirname $(readlink -f ${0}))/tools.sh
+
+if [ "$#" -ne 1 ]; then
+        echo "Usage: stable show-missing <commit range>"
+        exit 1
+fi
+
+function simple_print {
+	echo $(git log -1 --oneline $1)
+}
+
+gittools_show_missing_iter $1 simple_print

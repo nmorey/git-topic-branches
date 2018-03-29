@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Check if a given commit is in the current branch, based on the subject
+# rather than commit sha1.
+#
+
+source $(dirname $(readlink -f ${0}))/tools.sh
+
+if [ "$#" -ne 1 ]; then
+	echo "Usage: stable commit-in-tree <commit sha1>"
+	exit 1
+fi
+
+gittools_commit_in_tree $1
+exit $?
