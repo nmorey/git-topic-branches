@@ -221,7 +221,7 @@ gittools_blacklisted()
 	local branch=$(gittools_curbranch)
 
 	BLACKLIST=$
-	for br in $(git notes show $cmt); do
+	for br in $(git notes show $cmt 2> /dev/null); do
 		if [ "$br" == "$branch" ]; then
 			return 0
 		fi
