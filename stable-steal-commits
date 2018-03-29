@@ -35,7 +35,7 @@ function pick_one {
 }
 
 function do_one {
-	for i in $(git log --no-merges --format="%H" $1 $2 | tac); do
+	for i in $(git log --no-merges --format="%H" $1 | tac); do
 		subj=$(git log -1 --format="%s" $i)
 		msg=''
 		# Let's grab the mainline commit id, this is useful if the version tag
@@ -54,6 +54,34 @@ function do_one {
 			continue
 		fi
 
+		rep=''
+		do_cp=0
+		git show --format=oneline --no-patch --no-decorate $orig_cmt
+		while [ "$rep" != "y" ]; do
+			echo "Do you want to steal this commit ? (y/n/?)"
+			read rep
+			case $rep in
+				n|N)
+					echo "Skip this commit"
+					break
+					;;
+				y|Y)
+					rep=y
+					do_cp=1
+					break
+					;;
+				"?")
+					git show $orig_cmt
+					;;
+				*)
+					echo "Invalid answer $rep"
+					git show --format=oneline --no-patch --no-decorate $orig_cmt
+					;;
+			esac
+		done
+		if [ $do_cp -ne 1 ]; then
+			continue
+		fi
 		pick_one $i
 		if [ $? -gt 0 ] ; then
 			if [ $(git status -uno --porcelain | wc -l) -eq 0 ]; then
@@ -78,10 +106,15 @@ function do_one {
 	done
 }
 
-if [ "$#" -ne 1 ] && [ "$#" -ne 2 ]; then
-        echo "Usage: stable steal-commits <commit range> [branch]"
+RANGE=''
+if [ $# -gt 1 ]; then
+        echo "Usage: stable show-missing [<commit range>]"
         exit 1
+elif [  $# -eq 1 ]; then
+	RANGE=$1
+else
+	RANGE="$(gittools_match_curstable)..origin/master"
 fi
 
-do_one $1 $2
+do_one $RANGE
 
