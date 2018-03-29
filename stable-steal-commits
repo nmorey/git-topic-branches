@@ -54,15 +54,28 @@ function do_one {
 			continue
 		fi
 
+		# Check if it's not blacklisted by a git-notes
+		gittools_blacklisted $orig_cmt
+		if [ $? -eq 0 ]; then
+		    # Commit is blacklisted
+			echo "Skipping 'blacklisted' commit $(git show --format=oneline --no-patch --no-decorate $orig_cmt)"
+			continue
+		fi
+
 		rep=''
 		do_cp=0
 		git show --format=oneline --no-patch --no-decorate $orig_cmt
 		while [ "$rep" != "y" ]; do
-			echo "Do you want to steal this commit ? (y/n/?)"
+			echo "Do you want to steal this commit ? (y/n/b/?)"
 			read rep
 			case $rep in
 				n|N)
 					echo "Skip this commit"
+					break
+					;;
+				b)
+					echo "Blacklisting this commit for the current branch"
+					gittools_add_blacklist $orig_cmt
 					break
 					;;
 				y|Y)

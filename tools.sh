@@ -215,6 +215,29 @@ gittools_make_pretty()
 	git commit -s --amend -m "$msg"
 }
 
+gittools_blacklisted()
+{
+	local cmt=$1
+	local branch=$(gittools_curbranch)
+
+	BLACKLIST=$
+	for br in $(git notes show $cmt); do
+		if [ "$br" == "$branch" ]; then
+			return 0
+		fi
+	done
+
+	return 1
+}
+
+gittools_add_blacklist()
+{
+	local cmt=$1
+	local branch=$(gittools_curbranch)
+
+	git notes append -m "$branch" $1
+}
+
 gittools_check_relevant()
 {
 	local cmt=$1
