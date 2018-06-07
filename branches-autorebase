@@ -24,7 +24,7 @@ __rebase_branch()
 	echo "REBASING: ${branch} on ${base}"
 	git checkout  $branch
 
-	git rebase $base
+	git rebase $base --keep-empty
 	if [ $? -ne 0 ]; then
 		echo "REBASING FAILURE: ${branch} on ${base}"
 		if [ "$ignore_err" == 1 ]; then
