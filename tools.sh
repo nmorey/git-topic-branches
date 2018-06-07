@@ -243,7 +243,7 @@ gittools_check_relevant()
 	local cmt=$1
 
 	# Let's grab the commit that this commit fixes (if exists (based on the "Fixes:" tag)).
-	fixescmt=`git log -1 $cmt | grep -i "fixes:" | head -n 1 | sed -e 's/^[ \t]*//' | cut -f 2 -d ':' | sed -e 's/^[ \t]*//' | cut -f 1 -d ' '`
+	fixescmt=`git log -1 $cmt | grep -i "fixes:" | head -n 1 | sed -e 's/^[ \t]*//' | cut -f 2 -d ':' | sed -e 's/^[ \t]*//' -e 's/\([0-9a-f]\+\)(/\1 (/' | cut -f 1 -d ' '`
 
 	# If this commit fixes anything, but the broken commit isn't in our branch we don't
 	# need this commit either.
