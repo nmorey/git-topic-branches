@@ -35,6 +35,8 @@ function pick_one {
 }
 
 function do_one {
+	STABLE_BASE=$(gittools_match_curstable)
+
 	for i in $(git log --no-merges --format="%H" $1 | tac); do
 		subj=$(git log -1 --format="%s" $i)
 		msg=''
