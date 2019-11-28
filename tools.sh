@@ -4,7 +4,7 @@ GITTOOLS_MATCHES=$(git config --get-regexp   devel-base | egrep '^devel-base\.' 
 
 gittools_match_branch()
 {
-	local branch=$1
+	local branch=$(echo $1 | tr 'A-Z' 'a-z')
 	set -- $GITTOOLS_MATCHES
 	while [ $# -ne 0 ]; do
 		local regexp=$1
