@@ -12,5 +12,11 @@ fi
 gittools_check_work $SINCE $HEAD
 
 # Force unsettign DISPLAY to avoid a graphical prompt for this
-unset DISPLAY
+export GIT_ASKPASS=$(dirname $(dirname $(which git)))/lib/git-core/git-gui--askpass
+if [ ! -f $GIT_ASKPASS ]; then
+	export GIT_ASKPASS=$(dirname $(which git))/git-gui--askpass
+fi
+if [ ! -f $GIT_ASKPASS ]; then
+	export GIT_ASKPASS=/usr/lib/ssh/ssh-askpass
+fi
 exec git format-patch -M $(gittools_get_patch_target_option) "$(gittools_prefix_opt)" --stdout "$@" $SINCE  | git imap-send
