@@ -113,3 +113,54 @@ gittools_check_config_set()
 		exit 1
 	fi
 }
+
+gittools_rebase_branch()
+{
+	local branch=$1
+	local base=$2
+	local ignore_err=$3
+        local handle_lclone=$4
+
+	local branch_head=$(git rev-parse $branch)
+	local base_head=$(git rev-parse $base)
+
+	if [ "$branch_head" == "$base_head" ]; then
+		echo "INTEGRATED UPSTREAM: ${branch} already made it into ${base}"
+		return
+	fi
+
+	co_repo=$(gittools_is_branch_checked_out $branch)
+	if [ "$co_repo" != "" ]; then
+            if [ "$handle_lclone" == 1 ]; then
+                pushd "$co_repo"
+            else
+		echo "SKIPPING: ${branch} already checked out @ ${co_repo}"
+		return
+            fi
+	fi
+	echo "REBASING: ${branch} on ${base}"
+	git checkout  $branch
+
+	git rebase $base --keep-empty
+	if [ $? -ne 0 ]; then
+		echo "REBASING FAILURE: ${branch} on ${base}"
+		if [ "$ignore_err" == 1 ]; then
+			git rebase --abort
+		else
+			echo "REBASING FAILURE: Stopping here for manual fixup"
+	                if [ "$co_repo" != "" ]; then
+                            echo "REBASING FAILURE: happened in ${co_repo}"
+                        fi
+			exit 1
+		fi
+	fi
+	branch_head=$(git rev-parse $branch)
+
+        if [ "$handle_lclone" == 1 ]; then
+            popd
+        fi
+	if [ "$branch_head" == "$base_head" ]; then
+		echo "INTEGRATED UPSTREAM: ${branch} just made it into ${base}"
+		return
+	fi
+}
