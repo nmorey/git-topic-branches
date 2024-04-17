@@ -1,0 +1,30 @@
+#!/bin/bash
+
+source $(dirname $(readlink -f ${0}))/tools.sh
+
+original_branch=$(gittools_curbranch)
+
+(if [ $# -ne 0 ]; then
+	 branch=$1
+	 if [ "$1" == "HEAD" ]; then
+		 branch=$(git rev-parse --abbrev-ref HEAD)
+	 fi
+	 matching=$(gittools_match_branch $branch)
+	 if [ "$matching" == "" ]; then
+		 echo "REBASING: Branch '$branch' has not matching rebase"
+	 else
+		 __rebase_branch $branch ${matching} 0
+	 fi
+else
+	BRANCHES=$(git branch | awk '{ print $NF}')
+	for branch in $BRANCHES; do
+		matching=$(gittools_match_branch $branch)
+		if [ "$matching" != "" ]; then
+			gittools_rebase_branch $branch $matching 1 1
+		fi
+	done
+fi) 2>&1 | grep -e REBASING -e INTEGRATED -e SKIPPING
+
+if [ "$original_branch" != "" ]; then
+	git checkout $original_branch
+fi
