@@ -13,7 +13,7 @@ original_branch=$(gittools_curbranch)
 	 if [ "$matching" == "" ]; then
 		 echo "REBASING: Branch '$branch' has not matching rebase"
 	 else
-		 __rebase_branch $branch ${matching} 0
+		 gittools_rebase_branch $branch ${matching} 0 0
 	 fi
 else
 	BRANCHES=$(git branch | awk '{ print $NF}')
