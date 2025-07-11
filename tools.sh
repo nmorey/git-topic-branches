@@ -12,6 +12,9 @@ gittools_match_branch()
 		if [[ "$branch" =~ "${regexp}/" ]]; then
 			echo $basename
 			return
+                elif [[ "$branch" = "${regexp}" ]]; then
+			echo $basename
+			return
 		fi
 		shift 2;
 	done
